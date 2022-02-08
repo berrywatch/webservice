@@ -1,6 +1,6 @@
 package neu.coe.csye6225.Registration;
 
-import neu.coe.csye6225.registration.CRUD;
+import neu.coe.csye6225.Registration.CRUD;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

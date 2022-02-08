@@ -1,4 +1,4 @@
-package neu.coe.csye6225.registration;
+package neu.coe.csye6225.Registration;
 
 import org.springframework.web.bind.annotation.*;
 
