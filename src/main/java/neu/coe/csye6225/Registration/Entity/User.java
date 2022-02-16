@@ -1,6 +1,5 @@
 package neu.coe.csye6225.Registration.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -81,5 +80,16 @@ public class User {
 
     @Column()
     private String account_updated;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    @Column(updatable = false)
+    private String uuid;
 }
 

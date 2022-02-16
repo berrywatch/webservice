@@ -3,8 +3,6 @@ package neu.coe.csye6225.Registration.Service;
 import neu.coe.csye6225.Registration.Entity.User;
 import neu.coe.csye6225.Registration.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -32,6 +31,7 @@ public class UserService {
         user.setAccount_created(timeStamp);
         user.setAccount_updated(timeStamp);
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        user.setUuid(String.valueOf(UUID.randomUUID()));
         userRepository.save(user);
         return userRepository.findById(user.getUsername()).get();
     }
@@ -45,7 +45,7 @@ public class UserService {
             return false;
         }
         // check for fields
-        if (uu.getAccount_created() != null || uu.getAccount_updated() != null || uu.getUsername() != null) {
+        if (uu.getAccount_created() != null || uu.getAccount_updated() != null || uu.getUsername() != null || uu.getUuid()!=null) {
             return false;
         }
         // update values. account_created is not updatable due to Entity settings
@@ -59,7 +59,6 @@ public class UserService {
         u.setAccount_updated(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()));
         userRepository.save(u);
         return true;
-
     }
 
     public User get(String token) {
