@@ -24,6 +24,9 @@ public class UserService {
     }
 
     public User create(User user) {
+        if(user.getUsername()==null || user.getUsername().equals("")){
+            return null;
+        }
         if (userRepository.findById(user.getUsername()).isPresent()) {
             return null;
         }
