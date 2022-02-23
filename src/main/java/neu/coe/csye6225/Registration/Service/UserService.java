@@ -23,10 +23,17 @@ public class UserService {
         encoder = new BCryptPasswordEncoder();
     }
 
+    // Create and save a model user from request user.
     public User create(User user) {
+        // if username is null or doesn't exist, return null
         if(user.getUsername()==null || user.getUsername().equals("")){
             return null;
         }
+        // if username is not a valid email, return null
+        if(!validateEmail(user.getUsername())){
+            return null;
+        }
+        // if username already exists, return null
         if (userRepository.findById(user.getUsername()).isPresent()) {
             return null;
         }
@@ -39,6 +46,7 @@ public class UserService {
         return userRepository.findById(user.getUsername()).get();
     }
 
+    // Update user information. Username, uuid, account_created, account_updated  fields are not allowed, return false if they exist.
     public boolean update(User uu, String token) {
         String[] values = getAuthentication(token);
         if (values == null) return false;
@@ -64,6 +72,7 @@ public class UserService {
         return true;
     }
 
+    // Get user information from token. If unauthorized, return null.
     public User get(String token) {
         String[] values = getAuthentication(token);
         if(values==null) return null;
@@ -99,5 +108,9 @@ public class UserService {
             return false;
         }
         return true;
+    }
+
+    private boolean validateEmail(String email){
+        return email.indexOf('@')!=-1 && email.indexOf('.')!=-1;
     }
 }
