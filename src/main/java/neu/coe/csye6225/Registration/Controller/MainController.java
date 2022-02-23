@@ -35,7 +35,7 @@ public class MainController {
     @GetMapping(path="/self")
     public ResponseEntity<User> get(@RequestHeader("authorization") String authorization){
         User u = userService.get(authorization);
-        if(u==null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if(u==null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<User>(u,HttpStatus.OK);
     }
 }
