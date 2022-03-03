@@ -15,9 +15,9 @@ class HelloWorldTest {
     }
 
     @Test
-    void postRequest() {
+    void homeRequest() {
         HelloWorld c = new HelloWorld();
-        String response = c.postRequest("Bob","body");
-        assertEquals("Post received, Bob", response);
+        String response = c.homeRequest("body");
+        assertEquals("Hello World!", response);
     }
 }
