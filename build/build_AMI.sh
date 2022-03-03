@@ -1,0 +1,1 @@
+packer build -var-file='./template/vars.json' ./template/ami.pkr.hcl
