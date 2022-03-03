@@ -9,8 +9,8 @@ public class HelloWorld {
         return String.format("Hello, %s", name);
     }
 
-    @PostMapping("/")
-    public String postRequest(@RequestParam(value="name", defaultValue = "post") String name, @RequestBody String body){
-        return String.format("Post received, %s", name);
+    @GetMapping("/")
+    public String homeRequest(@RequestBody String body){
+        return String.format("Hello World!");
     }
 }
