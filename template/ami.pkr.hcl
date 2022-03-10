@@ -88,24 +88,9 @@ build {
       "sudo mv apache-maven-3.8.4  /usr/local/apache-maven",
       "rm apache-maven-3.8.4-bin.tar.gz",
       "export M2_HOME=/usr/local/apache-maven && export M2=$M2_HOME/bin && export PATH=$M2:$PATH",
-      "sudo wget https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm",
-      "sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022",
-      "sudo rpm -Uvh mysql80-community-release-el7-3.noarch.rpm",
-      "sudo yum install mysql-server -y",
-      "sudo systemctl stop mysqld",
-      "sudo systemctl set-environment MYSQLD_OPTS='--skip-grant-tables'",
-      "sudo systemctl start mysqld",
-      "mysql -u root -Bse \"FLUSH PRIVILEGES;ALTER USER 'root'@'localhost' IDENTIFIED by 'xcd2fd!daX';CREATE DATABASE cloud_computing;\"",
-      "sudo systemctl stop mysqld",
-      "sudo systemctl unset-environment MYSQLD_OPTS",
-      "sudo systemctl start mysqld",
       "mkdir project",
       "cd project",
-      "mv /tmp/webservice .",
-      "cd webservice",
-      "mvn clean package",    
-      "sudo chmod +x target/Registration-0.0.1-SNAPSHOT.jar",
-      "sudo mv template/registration.service /etc/systemd/system"
+      "mv /tmp/webservice ."
       ]
   }
 }
