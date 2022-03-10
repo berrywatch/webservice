@@ -1,6 +1,10 @@
 package neu.coe.csye6225.Registration.Service;
 
 import neu.coe.csye6225.Registration.Entity.User;
+import neu.coe.csye6225.Registration.Exception.BadFormatException;
+import neu.coe.csye6225.Registration.Exception.EmailExistsException;
+import neu.coe.csye6225.Registration.Exception.EmailNotValidException;
+import neu.coe.csye6225.Registration.Exception.UnauthorizedException;
 import neu.coe.csye6225.Registration.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,17 +29,17 @@ public class UserService {
 
     // Create and save a model user from request user.
     public User create(User user) {
-        // if username is null or doesn't exist, return null
+        // if username is null or doesn't exist, throw exception
         if(user.getUsername()==null || user.getUsername().equals("")){
-            return null;
+            throw new EmailNotValidException();
         }
-        // if username is not a valid email, return null
+        // if username is not a valid email, throw exception
         if(!validateEmail(user.getUsername())){
-            return null;
+            throw new EmailNotValidException();
         }
         // if username already exists, return null
         if (userRepository.findById(user.getUsername()).isPresent()) {
-            return null;
+            throw new EmailExistsException();
         }
         String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
         user.setAccount_created(timeStamp);
@@ -47,17 +51,17 @@ public class UserService {
     }
 
     // Update user information. Username, uuid, account_created, account_updated  fields are not allowed, return false if they exist.
-    public boolean update(User uu, String token) {
+    public void update(User uu, String token) {
         String[] values = getAuthentication(token);
-        if (values == null) return false;
+        if (values == null) throw new UnauthorizedException();
         String username = values[0];
         String password = values[1];
         if(!checkAuthentication(username,password)){
-            return false;
+            throw new UnauthorizedException();
         }
         // check for fields
         if (uu.getAccount_created() != null || uu.getAccount_updated() != null || uu.getUsername() != null || uu.getUuid()!=null) {
-            return false;
+            throw new BadFormatException();
         }
         // update values. account_created is not updatable due to Entity settings
         User u = userRepository.findById(username).get();
@@ -69,17 +73,16 @@ public class UserService {
             u.setPassword(encoder.encode(uu.getPassword()));
         u.setAccount_updated(new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date()));
         userRepository.save(u);
-        return true;
     }
 
     // Get user information from token. If unauthorized, return null.
     public User get(String token) {
         String[] values = getAuthentication(token);
-        if(values==null) return null;
+        if(values==null) throw new UnauthorizedException();
         String username = values[0];
         String password = values[1];
         if(!checkAuthentication(username,password)){
-            return null;
+            throw new UnauthorizedException();
         }
         return userRepository.findById(username).get();
     }

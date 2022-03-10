@@ -5,12 +5,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class HelloWorld {
     @GetMapping("/healthz")
-    public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return String.format("Hello, %s", name);
+    public String healthz() {
+        return "";
     }
 
-    @GetMapping("/")
-    public String homeRequest(@RequestBody String body){
+    @GetMapping("")
+    public String homeRequest(){
         return String.format("Hello World!");
     }
 }

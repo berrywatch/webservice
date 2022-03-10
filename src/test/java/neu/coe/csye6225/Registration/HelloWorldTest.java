@@ -8,16 +8,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class HelloWorldTest {
 
     @Test
-    void hello() {
+    void healthz() {
         HelloWorld c = new HelloWorld();
-        String response = c.hello("world!");
-        assertEquals("Hello, world!", response);
+        String response = c.healthz();
+        assertEquals("", response);
     }
 
     @Test
     void homeRequest() {
         HelloWorld c = new HelloWorld();
-        String response = c.homeRequest("body");
+        String response = c.homeRequest();
         assertEquals("Hello World!", response);
     }
 }
