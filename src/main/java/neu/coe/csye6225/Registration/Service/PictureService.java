@@ -47,6 +47,7 @@ public class PictureService {
             pictureRepository.deleteById(u.getUuid());
         }
 
+        // save to database
         Picture pic = new Picture();
         pic.setPic_id(pic_id);
         pic.setFile_name(file_name);
@@ -95,6 +96,7 @@ public class PictureService {
 
     // delete all files attached to this user
     private void deleteObject(User u){
+        System.out.format("Deleting all %s's existing picture first...\n", u.getUsername());
         List<S3ObjectSummary> list =  s3.listObjects(bucket_name,u.getUuid()).getObjectSummaries();
         for(S3ObjectSummary s3os: list){
             s3.deleteObject(bucket_name, s3os.getKey());
