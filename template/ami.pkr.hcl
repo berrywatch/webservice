@@ -70,10 +70,7 @@ source "amazon-ebs" "example" {
 
 build {
   name = "learn-packer"
-  provisioner "file" {
-  source = "${var.webservice}"
-  destination = "/tmp/webservice"
-  }
+  
   sources = [
     "source.amazon-ebs.example"
   ]
@@ -82,15 +79,19 @@ build {
     inline = [
       "echo Connected via SSM at '${build.User}@${build.Host}:${build.Port}'",
       "sudo yum update -y",
+      "sleep 15",
       "sudo yum install java -y",
+      "sleep 15",
+      "sudo yum install ruby -y",
       "wget https://dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz",
       "tar xvf apache-maven-3.8.5-bin.tar.gz",
       "sudo mv apache-maven-3.8.5  /usr/local/apache-maven",
       "rm apache-maven-3.8.5-bin.tar.gz",
-      "export M2_HOME=/usr/local/apache-maven && export M2=$M2_HOME/bin && export PATH=$M2:$PATH",
-      "mkdir project",
-      "cd project",
-      "mv /tmp/webservice ."
+      "cd /home/ec2-user/",
+      "wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install",
+      "chmod +x ./install",
+      "sudo ./install auto",
+      "sudo mkdir /var/webapp"
       ]
   }
 }
