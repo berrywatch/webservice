@@ -1,0 +1,56 @@
+name: Build & Deploy WebApp
+
+env:
+  AWS_REGION: us-east-1
+  CODE_DEPLOY_BUCKET: codedeploy.prod.kanzhang.me
+  S3_WEB_FILE: webapp.zip
+
+on:
+  push:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  ci_cd:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-region: ${{ env.AWS_REGION }}
+        aws-access-key-id: ${{ secrets.CI_CD_AWS_ACCESS_KEY}}
+        aws-secret-access-key: ${{ secrets.CI_CD_AWS_SECRET_KEY }}
+
+    - name: Build Artifact
+      run: |
+        pwd
+        ls
+        mvn clean package 
+
+    - name: Push Revision
+      run: |
+        pwd
+        ls
+        mkdir CodeDeployFiles && cd CodeDeployFiles
+        mv ../appspec.yml .
+        mv ../target/Registration-0.0.1-SNAPSHOT.jar .
+        mv ../codedeploy .
+        mv ../template/registration.service .
+        aws deploy push \
+          --application-name csye6225-webapp \
+          --description "This is a revision for the web application" \
+          --ignore-hidden-files \
+          --s3-location s3://${{ env.CODE_DEPLOY_BUCKET }}/${{ env.S3_WEB_FILE }} \
+          --source . 
+        pwd
+        ls 
+
+    - name: Call Code Deploy
+      run: |
+        aws deploy create-deployment --application-name csye6225-webapp \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --deployment-group-name csye6225-webapp-deployment \
+          --description "CSYE6225 - CodeDeploy" \
+          --s3-location bucket=${{ env.CODE_DEPLOY_BUCKET }},key=${{ env.S3_WEB_FILE }},bundleType=zip \
+          --output json 
