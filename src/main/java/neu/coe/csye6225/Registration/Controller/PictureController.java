@@ -14,9 +14,13 @@ import neu.coe.csye6225.Registration.Exception.PictureNotFoundException;
 import neu.coe.csye6225.Registration.Exception.UnauthorizedException;
 import neu.coe.csye6225.Registration.Repository.UserRepository;
 import neu.coe.csye6225.Registration.Service.PictureService;
+import neu.coe.csye6225.Registration.Util.StatsdClient;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -43,33 +47,53 @@ public class PictureController {
     @Autowired
     private PictureService pictureService;
 
+    @Autowired
+    private StatsdClient statsdClient;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @PostMapping(path="")
     public ResponseEntity<Picture> addProfile(@RequestParam("picture")MultipartFile file, @RequestHeader("authorization") String authorization){
+        statsdClient.increment("user.pic.post");
         User u = getUser(authorization);
-        if(u==null) throw new UnauthorizedException();
+        if(u==null) {
+            logger.error(String.format("User %s authorization failed", u.getUsername()));
+            throw new UnauthorizedException();
+        }
         // check for picture format
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         if(! (extension.equals("jpg") || extension.equals("png") || extension.equals("jpeg"))){
+            logger.error("Picture format not be supported.");
             throw new PictureFormatNotSupportException();
         }
-
+        logger.info("Saving picture...");
         Picture pic = pictureService.postPicture(file, u);
         return new ResponseEntity<Picture>(pic, HttpStatus.CREATED);
     }
 
     @GetMapping(path="")
     public ResponseEntity<Picture> getProfile(@RequestHeader("authorization") String authorization){
+        statsdClient.increment("user.pic.get");
         User u = getUser(authorization);
-        if(u==null) throw new UnauthorizedException();
+        if(u==null) {
+            logger.error(String.format("User %s authorization failed", u.getUsername()));
+            throw new UnauthorizedException();
+        }
+        logger.info("Getting picture...");
         Picture pic = pictureService.getPicture(u);
         return new ResponseEntity<Picture>(pic, HttpStatus.OK);
     }
 
     @DeleteMapping(path="")
     public ResponseEntity<String> delProfile(@RequestHeader("authorization") String authorization){
+        statsdClient.increment("user.pic.delete");
         User u = getUser(authorization);
-        if(u==null) throw new UnauthorizedException();
+        if(u==null) {
+            logger.error(String.format("User %s authorization failed", u.getUsername()));
+            throw new UnauthorizedException();
+        }
         Picture pic = pictureService.getPicture(u);
+        logger.info("Deleting picture...");
         pictureService.deletePicture(u);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

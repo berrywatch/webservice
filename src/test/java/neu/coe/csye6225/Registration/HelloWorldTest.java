@@ -10,14 +10,14 @@ class HelloWorldTest {
     @Test
     void healthz() {
         HelloWorld c = new HelloWorld();
-        String response = c.healthz();
+        String response = c.healthzTest();
         assertEquals("", response);
     }
 
     @Test
     void homeRequest() {
         HelloWorld c = new HelloWorld();
-        String response = c.homeRequest();
+        String response = c.homeTest();
         assertEquals("Hello World!", response);
     }
 }

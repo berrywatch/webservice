@@ -79,10 +79,9 @@ build {
     inline = [
       "echo Connected via SSM at '${build.User}@${build.Host}:${build.Port}'",
       "sudo yum update -y",
-      "sleep 15",
       "sudo yum install java -y",
-      "sleep 15",
       "sudo yum install ruby -y",
+      "sudo yum install amazon-cloudwatch-agent -y",
       "wget https://dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz",
       "tar xvf apache-maven-3.8.5-bin.tar.gz",
       "sudo mv apache-maven-3.8.5  /usr/local/apache-maven",
