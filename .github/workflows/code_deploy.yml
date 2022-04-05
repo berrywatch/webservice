@@ -2,7 +2,7 @@ name: Build & Deploy WebApp
 
 env:
   AWS_REGION: us-east-1
-  CODE_DEPLOY_BUCKET: codedeploy.prod.kanzhang.me
+  CODE_DEPLOY_BUCKET: codedeploy.dev.kanzhang.me
   S3_WEB_FILE: webapp.zip
 
 on:
@@ -40,6 +40,7 @@ jobs:
           mv ../target/Registration-0.0.1-SNAPSHOT.jar .
           mv ../codedeploy .
           mv ../template/registration.service .
+          mv ../template/cloudwatch-agent.json .
           aws deploy push \
             --application-name csye6225-webapp \
             --description "This is a revision for the web application" \
