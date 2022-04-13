@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path="/v1/user")
+@RequestMapping(path="/v2/user")
 public class UserController {
     @Autowired
     private UserService userService;
