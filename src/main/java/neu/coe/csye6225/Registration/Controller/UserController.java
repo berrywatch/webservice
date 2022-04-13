@@ -43,7 +43,7 @@ public class UserController {
     public ResponseEntity<User> get(@RequestHeader("authorization") String authorization){
         statsdClient.increment("user.get");
         logger.info("Getting user...");
-        User u = userService.get(authorization);
+        User u = userService.getUser(authorization);
         return new ResponseEntity<User>(u,HttpStatus.OK);
     }
 }

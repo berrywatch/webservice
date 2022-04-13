@@ -1,10 +1,14 @@
 package neu.coe.csye6225.Registration.Controller;
 
+import neu.coe.csye6225.Registration.Util.SNSTopic;
 import neu.coe.csye6225.Registration.Util.StatsdClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.services.sns.SnsClient;
 
 @RestController
 public class HelloWorld {
