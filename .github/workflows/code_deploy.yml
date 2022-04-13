@@ -2,7 +2,7 @@ name: Build & Deploy WebApp
 
 env:
   AWS_REGION: us-east-1
-  CODE_DEPLOY_BUCKET: codedeploy.dev.kanzhang.me
+  CODE_DEPLOY_BUCKET: codedeploy.prod.kanzhang.me
   S3_WEB_FILE: webapp.zip
 
 on:
@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  ci_cd:
+  webapp_ci_cd:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

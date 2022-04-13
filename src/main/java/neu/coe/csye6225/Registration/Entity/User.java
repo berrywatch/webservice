@@ -65,6 +65,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", account_created='" + account_created + '\'' +
                 ", account_updated='" + account_updated + '\'' +
+                ", verified='" + verified + '\'' +
                 '}';
     }
 
@@ -91,5 +92,15 @@ public class User {
 
     @Column(updatable = false)
     private String uuid;
+
+    public Boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
+    }
+
+    private Boolean verified;
 }
 
